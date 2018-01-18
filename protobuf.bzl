@@ -244,16 +244,17 @@ def cc_proto_library(
       visibility=["//visibility:public"],
   )
 
+  cc_libs2 = cc_libs
   if default_runtime and not default_runtime in cc_libs:
-    cc_libs = cc_libs + [default_runtime]
+    cc_libs2 = cc_libs2 + [default_runtime]
   if use_grpc_plugin:
-    cc_libs = cc_libs + ["//external:grpc_lib"]
+    cc_libs2 = cc_libs2 + ["//external:grpc_lib"]
 
   native.cc_library(
       name=name,
       srcs=gen_srcs,
       hdrs=gen_hdrs,
-      deps=cc_libs + deps,
+      deps=cc_libs2 + deps,
       includes=includes,
       **kargs)
 
@@ -370,13 +371,14 @@ def py_proto_library(
       plugin_language="grpc"
   )
 
+  py_libs2 = py_libs
   if default_runtime and not default_runtime in py_libs + deps:
-    py_libs = py_libs + [default_runtime]
+    py_libs2 = py_libs2 + [default_runtime]
 
   native.py_library(
       name=name,
       srcs=outs+py_extra_srcs,
-      deps=py_libs+deps,
+      deps=py_libs2+deps,
       imports=includes,
       **kargs)
 
